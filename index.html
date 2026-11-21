@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SZOPERO — Odpalasz i grasz!</title>
+    <link rel="stylesheet" href="src/styles/style.css">
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <div class="brand">
+            <img src="assets/icons/logo.png" alt="SZOPERO" onerror="this.style.display='none'">
+            <div><h1>SZOPERO</h1><span>Odpalasz i grasz!</span></div>
+        </div>
+
+        <nav>
+            <button class="nav active" data-page="home">⌂ <span>Strona główna</span></button>
+            <button class="nav" data-page="games">▦ <span>Gry</span></button>
+            <button class="nav" data-page="favorites">♡ <span>Ulubione</span></button>
+            <button class="nav" data-page="about">ⓘ <span>O projekcie</span></button>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <span>Stworzone przez</span>
+            <strong>SzopikPraczekYT</strong>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <span class="small-label">TWOJA PLATFORMA GIER</span>
+                <h2 id="page-title">Strona główna</h2>
+            </div>
+            <div class="top-brand">SZOPERO</div>
+        </header>
+
+        <section class="page active" id="home">
+            <div class="hero">
+                <div>
+                    <span class="hero-label">WITAJ W SZOPERO</span>
+                    <h2>Świat gier<br>w jednym miejscu.</h2>
+                    <p>Odkrywaj nowe tytuły, uruchamiaj gry i twórz własną kolekcję.</p>
+                    <button class="primary" data-open="games">Przeglądaj gry →</button>
+                </div>
+                <div class="hero-symbol">🎮</div>
+            </div>
+
+            <div class="section-title">
+                <div><span class="small-label">WYBIERZ COŚ DLA SIEBIE</span><h2>Gry</h2></div>
+                <button class="link-button" data-open="games">Wszystkie gry →</button>
+            </div>
+            <div class="games-grid" id="home-grid"></div>
+        </section>
+
+        <section class="page" id="games">
+            <div class="intro">
+                <span class="small-label">KOLEKCJA SZOPERO</span>
+                <h2>Biblioteka gier</h2>
+                <p>Znajdź grę i uruchom ją bezpośrednio w aplikacji.</p>
+            </div>
+            <input id="search" type="search" placeholder="⌕  Wyszukaj grę...">
+            <div class="games-grid" id="games-grid"></div>
+            <p class="empty" id="games-empty" hidden>Nie znaleziono gier.</p>
+        </section>
+
+        <section class="page" id="favorites">
+            <div class="intro">
+                <span class="small-label">TWOJA KOLEKCJA</span>
+                <h2>Ulubione</h2>
+                <p>Gry, które zapiszesz na później.</p>
+            </div>
+            <div class="games-grid" id="favorites-grid"></div>
+            <p class="empty" id="favorites-empty" hidden>Nie masz jeszcze ulubionych gier.</p>
+        </section>
+
+        <section class="page" id="about">
+            <div class="about-card">
+                <span class="small-label">KILKA SŁÓW O PROJEKCIE</span>
+                <h2>Poznaj SZOPERO.</h2>
+                <p>SZOPERO to platforma gamingowa stworzona przez SzopikPraczekYT. Pozwala odkrywać, organizować i uruchamiać gry w jednym miejscu.</p>
+                <p>Projekt łączy własne minigry, wybrane gry internetowe i bibliotekę ulubionych tytułów.</p>
+                <div class="info-grid">
+                    <div><span>Nazwa</span><strong>SZOPERO</strong></div>
+                    <div><span>Twórca</span><strong>SzopikPraczekYT</strong></div>
+                    <div><span>Hasło</span><strong>Odpalasz i grasz!</strong></div>
+                    <div><span>Rodzaj</span><strong>Platforma gamingowa</strong></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page" id="player">
+            <button class="link-button back" id="back">← Wróć do gier</button>
+            <div class="intro"><span class="small-label">ROZGRYWKA</span><h2 id="player-title">Gra</h2></div>
+            <div class="player-box"><iframe id="game-frame" title="Odtwarzacz gry" allowfullscreen></iframe></div>
+        </section>
+    </main>
+</div>
+<script src="src/scripts/app.js"></script>
+</body>
+</html>

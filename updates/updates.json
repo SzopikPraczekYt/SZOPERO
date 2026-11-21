@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "name": "SZOPERO 1.0.0",
+  "download": "",
+  "changes": [
+    "Pierwsze oficjalne wydanie SZOPERO",
+    "Dodano bibliotekę gier",
+    "Dodano ekran startowy gier",
+    "Dodano logo SZOPERO"
+  ]
+}

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SZOPERO</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="../assets/icons/logo.png" alt="Logo SZOPERO">
+      <div><strong>SZOPERO</strong><small>GAME LAUNCHER</small></div>
+    </div>
+
+    <div class="menu-label">MENU</div>
+    <button class="nav active" data-page="home">⌂ <span>Strona główna</span></button>
+    <button class="nav" data-page="games">▣ <span>Moje gry</span></button>
+    <button class="nav" data-page="updates">↻ <span>Aktualizacje</span></button>
+    <button class="nav" data-page="about">ⓘ <span>O projekcie</span></button>
+
+    <div class="sidebar-bottom">
+      <span class="status-dot"></span> SZOPERO działa
+      <small>SzopikPraczekYT</small>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <span class="muted">Twoje centrum gier</span>
+        <h2 id="page-title">Strona główna</h2>
+      </div>
+      <div class="version" id="version">Wersja 1.0.0</div>
+    </header>
+
+    <section id="home" class="page active-page">
+      <div class="welcome-banner">
+        <div class="welcome-content">
+          <span class="welcome-label">WŁASNY ŚWIAT GIER</span>
+          <h1>Witaj w <span>SZOPERO.</span></h1>
+          <p>Jedno miejsce. Wiele gier. Nieograniczone pomysły.</p>
+          <div class="welcome-note">Miło Cię widzieć ponownie!</div>
+        </div>
+        <div class="welcome-mascot"><img src="../assets/icons/logo.png" class="brand-logo" alt="SZOPERO"></div>
+      </div>
+
+      <div class="home-heading">
+        <span class="tag">CENTRUM SZOPERO</span>
+        <h2>Co nowego?</h2>
+        <p>Najważniejsze informacje o Twoim launcherze.</p>
+      </div>
+
+      <div class="home-grid">
+        <div class="home-tile">
+          <div class="tile-icon purple">▣</div>
+          <h3>Biblioteka gier</h3>
+          <p>Wszystkie dostępne gry znajdziesz w jednym miejscu.</p>
+          <span>MOJE GRY</span>
+        </div>
+
+        <div class="home-tile">
+          <div class="tile-icon green">↻</div>
+          <h3>Aktualizacje</h3>
+          <p>Sprawdzaj nowości i zmiany w kolejnych wersjach.</p>
+          <span>NA BIEŻĄCO</span>
+        </div>
+
+        <div class="home-tile">
+          <div class="tile-icon orange">✦</div>
+          <h3>Nowe projekty</h3>
+          <p>To dopiero początek. Kolejne pomysły już czekają!</p>
+          <span>W ROZWOJU</span>
+        </div>
+      </div>
+
+      <div class="home-bottom">
+        <div class="home-info">
+          <span class="tag">POZNAJ NAS</span>
+          <h2>Więcej niż launcher.</h2>
+          <p>SZOPERO to projekt SzopikPraczekYT, w którym powstają własne gry i pomysły. Wszystko rozwijamy krok po kroku.</p>
+        </div>
+        <div class="home-version">
+          <div class="version-symbol"><img src="../assets/icons/logo.png" alt="Logo SZOPERO"></div>
+          <div>
+            <strong>SZOPERO</strong>
+            <p>Tworzone z pasją.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="games" class="page">
+      <div class="section-heading">
+        <div><h3>Moje gry</h3><p>Twoja biblioteka gier</p></div>
+      </div>
+
+      <div class="game-card">
+        <div class="game-art"><img src="../assets/icons/logo.png" class="brand-logo" alt="SZOPERO"></div>
+        <div class="game-info">
+          <span class="tag">GRA SZOPERO</span>
+          <h3>Szopik Klikacz</h3>
+          <p>Klikaj, zdobywaj punkty i ustanawiaj rekordy!</p>
+          <button class="small-primary" data-launch="clicker">Uruchom grę</button>
+        </div>
+      </div>
+
+      <div class="game-card">
+        <div class="game-art gd-art">
+          <img src="../assets/icons/geometry-dash.png" alt="Geometry Dash">
+        </div>
+        <div class="game-info">
+          <span class="tag">GEOMETRY DASH LITE</span>
+          <h3>Geometry Dash Lite</h3>
+          <p>Skacz, omijaj przeszkody i sprawdzaj swoje umiejętności!</p>
+          <button class="small-primary" data-launch="geometry-dash">Uruchom grę</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="updates" class="page">
+      <div class="section-heading"><div><h3>Aktualizacje</h3><p>Nowości i poprawki SZOPERO</p></div></div>
+      <div class="panel">
+        <span class="tag">AKTUALNA WERSJA</span>
+        <h3>SZOPERO 1.0.0</h3>
+        <p>Pierwsze wydanie launchera.</p>
+        <ul>
+          <li>Nowy launcher SZOPERO</li>
+          <li>Osobne okna dla gier</li>
+          <li>Pierwsza autorska gra — Szopik Klikacz</li>
+          <li>Biblioteka gier</li>
+        </ul>
+        <button class="primary" id="check-updates">Sprawdź aktualizacje</button>
+        <p id="update-result" class="muted"></p>
+      </div>
+    </section>
+
+    <section id="about" class="page">
+      <div class="section-heading"><div><h3>O projekcie</h3><p>Poznaj SZOPERO</p></div></div>
+      <div class="panel about">
+        <img src="../assets/icons/logo.png" alt="Logo SZOPERO">
+        <h2>SZOPERO</h2>
+        <p>Launcher gier tworzony przez SzopikPraczekYT.</p>
+        <p>To tutaj będą pojawiać się nasze własne gry, projekty i kolejne aktualizacje.</p>
+        <span class="tag">SZOPIKPRACZEKYT</span>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
+

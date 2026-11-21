@@ -1,0 +1,20 @@
+[
+  {
+    "id": "szopero-demo",
+    "name": "Szopero Demo",
+    "description": "Pierwsza mała gra uruchamiana bezpośrednio w SZOPERO.",
+    "category": "Demo",
+    "icon": "🦝",
+    "color": "purple",
+    "path": "src/games/demo/index.html"
+  },
+  {
+    "id": "coming-soon",
+    "name": "Kolejna gra",
+    "description": "Tutaj pojawi się następna gra dodana do biblioteki.",
+    "category": "Przygodowe",
+    "icon": "🎮",
+    "color": "blue",
+    "path": null
+  }
+]

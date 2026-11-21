@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Geometry Dash - SZOPERO</title>
+  <link rel="stylesheet" href="geometry-dash.css">
+</head>
+<body>
+  <header>
+    <button id="back">← Wróć do SZOPERO</button>
+    <strong>GEOMETRY DASH</strong>
+    <button id="openBrowser">Otwórz w przeglądarce ↗</button>
+  </header>
+
+  <main>
+    <div class="game-heading">
+      <span>STREFA GIER / PLATFORMOWA</span>
+      <h1>Geometry Dash</h1>
+      <p>Gra uruchamiana w ramce aplikacji.</p>
+    </div>
+
+    <div class="frame-wrap">
+      <iframe
+        id="gameFrame"
+        src="https://www.crazygames.com/game/geometry-dash"
+        title="Geometry Dash"
+        allow="fullscreen; autoplay"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <p class="hint">
+      Jeśli gra nie wyświetla się w ramce, użyj przycisku „Otwórz w przeglądarce”.
+      Niektóre strony blokują osadzanie gier w innych aplikacjach.
+    </p>
+  </main>
+
+  <script src="geometry-dash.js"></script>
+</body>
+</html>

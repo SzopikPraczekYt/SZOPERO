@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SZOPERO</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background: #101525;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+main {
+    width: min(90%, 480px);
+    padding: 45px 30px;
+    text-align: center;
+    background: #1b2540;
+    border: 1px solid #303d5c;
+    border-radius: 24px;
+}
+.brand {
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: 5px;
+}
+.subtitle {
+    color: #91a0bd;
+    font-size: 11px;
+    letter-spacing: 4px;
+    margin-top: 8px;
+}
+.line {
+    height: 1px;
+    background: #35415e;
+    margin: 30px 0;
+}
+h1 { font-size: 27px; }
+p { color: #aab6ce; }
+.loading-text { color:#aab6ce; font-size:11px; margin-top:25px; }
+    .bar { height:9px; background:#303d5c; border-radius:20px; overflow:hidden; margin-top:12px; }
+    #fill { height:100%; width:0%; background:#3978f6; transition:width .15s; }
+    button {
+    margin-top: 25px;
+    padding: 16px 45px;
+    border: 0;
+    border-radius: 12px;
+    background: #3978f6;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+button:hover { background: #5590ff; }
+</style>
+<style>
+.szopero-brand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 14px;
+}
+.szopero-brand img {
+    width: 76px;
+    height: 76px;
+    object-fit: contain;
+}
+</style>
+</head>
+<body>
+<div class="szopero-brand"><img src="../assets/icons/logo.png" alt="SZOPERO"></div>
+<main>
+    <div class="brand">SZOPERO</div>
+    <div class="subtitle">CENTRUM GIER</div>
+    <div class="line"></div>
+    <div id="loading">
+        <div class="loading-text">PRZYGOTOWYWANIE GRY <span id="percent">0%</span></div>
+        <div class="bar"><div id="fill"></div></div>
+    </div>
+    <h1 id="gameName">Ładowanie...</h1>
+    <p>Gra jest gotowa do uruchomienia.</p>
+    <button id="play">GRAJ ▶</button>
+</main>
+<script>
+const params = new URLSearchParams(location.search);
+const id = params.get("id");
+const names = {
+    "geometry-dash": "Geometry Dash Lite",
+    "clicker": "Szopik Klikacz"
+};
+const fill = document.getElementById("fill");
+const percent = document.getElementById("percent");
+const play = document.getElementById("play");
+play.disabled = true;
+play.style.opacity = "0.4";
+
+let progress = 0;
+const timer = setInterval(() => {
+    progress = Math.min(100, progress + 5);
+    fill.style.width = progress + "%";
+    percent.textContent = progress + "%";
+
+    if (progress === 100) {
+        clearInterval(timer);
+        play.disabled = false;
+        play.style.opacity = "1";
+    }
+}, 100);
+
+document.getElementById("gameName").textContent =
+    names[id] || "Nieznana gra";
+
+document.getElementById("play").addEventListener("click", async () => {
+    const button = document.getElementById("play");
+    button.disabled = true;
+    button.textContent = "URUCHAMIANIE...";
+    try {
+        await window.gameLauncher.startGame(id);
+    } catch (error) {
+        button.disabled = false;
+        button.textContent = "GRAJ ▶";
+        alert("Nie udało się uruchomić gry.");
+    }
+});
+</script>
+</body>
+</html>
+

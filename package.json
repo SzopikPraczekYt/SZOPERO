@@ -1,0 +1,44 @@
+{
+  "name": "szopero",
+  "version": "1.0.0",
+  "description": "SZOPERO - launcher gier SzopikPraczekYT",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win portable",
+    "installer": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^39.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "pl.szopikpraczekyt.szopero",
+    "productName": "SZOPERO",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "assets/**/*",
+      "package.json",
+      "game-start-preload.js"
+    ],
+    "win": {
+      "target": [
+        "portable",
+        "nsis"
+      ]
+    },
+    "portable": {
+      "artifactName": "SZOPERO-${version}-portable.exe"
+    },
+    "nsis": {
+      "artifactName": "SZOPERO-${version}-Setup.exe",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

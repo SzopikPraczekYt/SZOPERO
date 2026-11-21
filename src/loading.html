@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ładowanie SZOPERO</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Segoe UI", sans-serif;
+  background: #ffffff;
+  color: #202938;
+}
+main { width: 100%; padding: 30px 34px; text-align: center; }
+h2 { margin: 0 0 8px; font-size: 22px; }
+p { margin: 0 0 22px; color: #788397; font-size: 13px; }
+.track {
+  height: 9px;
+  background: #e9edf3;
+  border-radius: 20px;
+  overflow: hidden;
+}
+#bar {
+  width: 0%;
+  height: 100%;
+  border-radius: 20px;
+  background: #65c99b;
+  transition: width .18s ease;
+}
+#percent {
+  display: block;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #526174;
+}
+</style>
+<style>
+.szopero-brand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 14px;
+}
+.szopero-brand img {
+    width: 76px;
+    height: 76px;
+    object-fit: contain;
+}
+</style>
+</head>
+<body>
+<div class="szopero-brand"><img src="../assets/icons/logo.png" alt="SZOPERO"></div>
+<main>
+  <h2>Uruchamianie gry</h2>
+  <p>Przygotowujemy ją do uruchomienia...</p>
+  <div class="track"><div id="bar"></div></div>
+  <span id="percent">0%</span>
+</main>
+<script>
+window.setProgress = function(value) {
+  const amount = Math.max(0, Math.min(100, value));
+  document.getElementById("bar").style.width = amount + "%";
+  document.getElementById("percent").textContent = amount + "%";
+};
+</script>
+</body>
+</html>
+

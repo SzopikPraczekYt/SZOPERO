@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Szopik Click</title>
+<link rel="stylesheet" href="game.css">
+</head>
+<body>
+<main class="game">
+    <div class="top">
+        <span>SZOPERO ARCADE</span>
+        <span>MINIGRA</span>
+    </div>
+    <h1>Szopik Click!</h1>
+    <p>Klikaj szopa i zdobywaj punkty!</p>
+    <div class="stats">
+        <div><small>PUNKTY</small><strong id="score">0</strong></div>
+        <div><small>CZAS</small><strong id="time">30</strong></div>
+        <div><small>REKORD</small><strong id="best">0</strong></div>
+    </div>
+    <div class="arena" id="arena">
+        <div class="message" id="message">Gotowy na grę?</div>
+        <button id="target" hidden aria-label="Kliknij cel">🦝</button>
+    </div>
+    <button class="start" id="start">ROZPOCZNIJ GRĘ</button>
+    <p class="hint">Masz 30 sekund. Złap jak najwięcej szopików!</p>
+</main>
+<script src="game.js"></script>
+</body>
+</html>
