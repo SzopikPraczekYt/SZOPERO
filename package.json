@@ -1,6 +1,6 @@
 {
   "name": "szopero",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SZOPERO - launcher gier SzopikPraczekYT",
   "main": "main.js",
   "scripts": {
@@ -39,6 +39,14 @@
       "artifactName": "SZOPERO-${version}-Setup.exe",
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "SzopikPraczekYt",
+      "repo": "SZOPERO"
     }
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11"
   }
 }

@@ -31,15 +31,39 @@ document.querySelectorAll("[data-launch]").forEach(button => {
   document.getElementById("version").textContent = `Wersja ${version}`;
 })();
 
-document.getElementById("check-updates").addEventListener("click", async () => {
-  const result = document.getElementById("update-result");
-  result.textContent = "Sprawdzanie aktualizacji...";
-  const update = await window.szopero.checkUpdates();
+const updateResult = document.getElementById("update-result");
+const checkButton = document.getElementById("check-updates");
 
-  if (update.available) {
-    result.textContent = `Dostępna aktualizacja: ${update.latest}`;
-    if (update.url) window.szopero.openLink(update.url);
-  } else {
-    result.textContent = update.error || "Masz najnowszą wersję SZOPERO.";
+function showUpdateStatus(data) {
+  if (data.status === "checking") {
+    updateResult.textContent = "Sprawdzanie aktualizacji...";
+  } else if (data.status === "available") {
+    updateResult.textContent = `Dostępna wersja ${data.version}. Pobieranie...`;
+  } else if (data.status === "downloading") {
+    updateResult.textContent = `Pobieranie aktualizacji: ${data.percent}%`;
+  } else if (data.status === "downloaded") {
+    updateResult.textContent = `Wersja ${data.version} jest gotowa do instalacji.`;
+    let installButton = document.getElementById("install-update");
+    if (!installButton) {
+      installButton = document.createElement("button");
+      installButton.id = "install-update";
+      installButton.textContent = "Zainstaluj aktualizację";
+      checkButton.insertAdjacentElement("afterend", installButton);
+    }
+    installButton.onclick = () => window.szopero.installUpdate();
+  } else if (data.status === "not-available") {
+    updateResult.textContent = "Masz najnowszą wersję SZOPERO.";
+  } else if (data.status === "error") {
+    updateResult.textContent = "Błąd aktualizacji: " + data.message;
+  }
+}
+
+window.szopero.onUpdateStatus(showUpdateStatus);
+
+checkButton.addEventListener("click", async () => {
+  updateResult.textContent = "Uruchamianie sprawdzania aktualizacji...";
+  const result = await window.szopero.checkUpdates();
+  if (!result.started) {
+    updateResult.textContent = result.error || "Nie udało się sprawdzić aktualizacji.";
   }
 });

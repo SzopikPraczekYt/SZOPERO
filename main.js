@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain, shell } = require("electron");
 const path = require("path");
+const { autoUpdater } = require("electron-updater");
 
 let launcher;
 
@@ -149,30 +150,58 @@ ipcMain.handle("open-game", (_event, id) => {
 
 ipcMain.handle("get-version", () => app.getVersion());
 
-ipcMain.handle("check-updates", async () => {
-  try {
-    const response = await fetch(
-      "https://szopikpraczekyt-nowastrona.neocities.org/updates/updates.json"
-    );
 
-    if (!response.ok) {
-      return { available: false, error: "Nie udało się pobrać informacji o aktualizacji." };
+function sendUpdateStatus(data) {
+  BrowserWindow.getAllWindows().forEach((win) => {
+    if (!win.isDestroyed()) {
+      win.webContents.send("update-status", data);
     }
+  });
+}
 
-    const update = await response.json();
-    const current = app.getVersion();
+autoUpdater.on("checking-for-update", () => {
+  sendUpdateStatus({ status: "checking" });
+});
 
-    return {
-      available: update.version !== current,
-      current,
-      latest: update.version,
-      name: update.name,
-      changes: update.changes,
-      download: update.download
-    };
-  } catch {
-    return { available: false, error: "Brak połączenia z serwerem aktualizacji." };
+autoUpdater.on("update-available", (info) => {
+  sendUpdateStatus({ status: "available", version: info.version });
+});
+
+autoUpdater.on("download-progress", (progress) => {
+  sendUpdateStatus({
+    status: "downloading",
+    percent: Math.round(progress.percent)
+  });
+});
+
+autoUpdater.on("update-downloaded", (info) => {
+  sendUpdateStatus({ status: "downloaded", version: info.version });
+});
+
+autoUpdater.on("update-not-available", () => {
+  sendUpdateStatus({ status: "not-available" });
+});
+
+autoUpdater.on("error", (error) => {
+  sendUpdateStatus({ status: "error", message: error.message });
+});
+
+ipcMain.handle("check-updates", async () => {
+  if (!app.isPackaged) {
+    return { started: false, error: "Aktualizacje sprawdzisz w zainstalowanej wersji SZOPERO." };
   }
+
+  try {
+    await autoUpdater.checkForUpdates();
+    return { started: true };
+  } catch (error) {
+    return { started: false, error: error.message };
+  }
+});
+
+ipcMain.handle("install-update", () => {
+  autoUpdater.quitAndInstall();
+  return true;
 });
 
 ipcMain.handle("open-link", (_event, url) => {
@@ -181,7 +210,12 @@ ipcMain.handle("open-link", (_event, url) => {
   }
 });
 
-app.whenReady().then(createLauncher);
+app.whenReady().then(() => {
+  createLauncher();
+  if (app.isPackaged) {
+    setTimeout(() => autoUpdater.checkForUpdates().catch(() => {}), 5000);
+  }
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
