@@ -6,3 +6,5 @@ out/
 release/
 backup/
 *.backup
+SZOPERO-Test-Certificate.pfx
+SZOPERO-Test-Certificate.cer
