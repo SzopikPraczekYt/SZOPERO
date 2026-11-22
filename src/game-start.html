@@ -3,135 +3,221 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SZOPERO</title>
+<title>SZOPERO — Uruchamianie gry</title>
 <style>
-* { box-sizing: border-box; }
-body {
-    margin: 0;
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    background: #101525;
-    color: white;
-    font-family: Arial, sans-serif;
+*{box-sizing:border-box}
+body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 50% 0%,#26385c 0%,transparent 65%),
+      #0b1020;
+    color:#f5f7ff;
+    font-family:Arial,sans-serif;
+    display:grid;
+    place-items:center;
+    padding:25px;
 }
-main {
-    width: min(90%, 480px);
-    padding: 45px 30px;
-    text-align: center;
-    background: #1b2540;
-    border: 1px solid #303d5c;
-    border-radius: 24px;
+main{
+    width:min(100%,760px);
+    background:linear-gradient(145deg,#192642,#111a2e);
+    border:1px solid #344768;
+    border-radius:25px;
+    padding:30px;
+    box-shadow:0 25px 80px #0008;
 }
-.brand {
-    font-size: 38px;
-    font-weight: 900;
-    letter-spacing: 5px;
+header{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding-bottom:20px;
+    border-bottom:1px solid #35415e;
 }
-.subtitle {
-    color: #91a0bd;
-    font-size: 11px;
-    letter-spacing: 4px;
-    margin-top: 8px;
+header img{width:48px;height:48px;object-fit:contain}
+.brand{font-size:23px;font-weight:900;letter-spacing:3px}
+.subtitle{font-size:10px;color:#91a5c8;letter-spacing:2px;margin-top:5px}
+.content{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    gap:30px;
+    align-items:center;
+    padding:35px 0 25px;
 }
-.line {
-    height: 1px;
-    background: #35415e;
-    margin: 30px 0;
+.art{
+    height:230px;
+    border-radius:19px;
+    background:linear-gradient(145deg,#263b61,#111a2d);
+    border:1px solid #405578;
+    display:grid;
+    place-items:center;
+    overflow:hidden;
 }
-h1 { font-size: 27px; }
-p { color: #aab6ce; }
-.loading-text { color:#aab6ce; font-size:11px; margin-top:25px; }
-    .bar { height:9px; background:#303d5c; border-radius:20px; overflow:hidden; margin-top:12px; }
-    #fill { height:100%; width:0%; background:#3978f6; transition:width .15s; }
-    button {
-    margin-top: 25px;
-    padding: 16px 45px;
-    border: 0;
-    border-radius: 12px;
-    background: #3978f6;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
+.art img{width:100%;height:100%;object-fit:contain;padding:12px}
+.art .placeholder{font-size:95px}
+.category{
+    color:#72a9ff;
+    font-size:11px;
+    font-weight:bold;
+    letter-spacing:2px;
+    text-transform:uppercase;
 }
-button:hover { background: #5590ff; }
-</style>
-<style>
-.szopero-brand {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto 14px;
+h1{font-size:30px;margin:12px 0}
+.description{color:#aab9d2;line-height:1.6;font-size:14px}
+.status{margin-top:24px;color:#91a5c8;font-size:11px;letter-spacing:1px}
+.bar{height:7px;background:#303e59;border-radius:20px;margin-top:10px;overflow:hidden}
+#fill{height:100%;width:0;background:linear-gradient(90deg,#3978f6,#70d6a5);transition:width .15s}
+#percent{float:right}
+footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-top:1px solid #35415e;
+    padding-top:22px;
+    gap:15px;
 }
-.szopero-brand img {
-    width: 76px;
-    height: 76px;
-    object-fit: contain;
+.footer-text{font-size:11px;color:#8192b1}
+button{
+    border:0;
+    border-radius:12px;
+    padding:15px 35px;
+    background:linear-gradient(135deg,#3978f6,#2860d0);
+    color:white;
+    font-weight:900;
+    font-size:15px;
+    cursor:pointer;
+    box-shadow:0 7px 22px #3978f644;
+}
+button:hover{filter:brightness(1.15);transform:translateY(-1px)}
+button:disabled{opacity:.4;cursor:wait;transform:none}
+@media(max-width:600px){
+    main{padding:20px}
+    .content{grid-template-columns:1fr;gap:20px;padding:25px 0}
+    .art{height:190px}
+    h1{font-size:25px}
+    footer{align-items:stretch;flex-direction:column}
+    button{width:100%}
 }
 </style>
 </head>
 <body>
-<div class="szopero-brand"><img src="../assets/icons/logo.png" alt="SZOPERO"></div>
 <main>
-    <div class="brand">SZOPERO</div>
-    <div class="subtitle">CENTRUM GIER</div>
-    <div class="line"></div>
-    <div id="loading">
-        <div class="loading-text">PRZYGOTOWYWANIE GRY <span id="percent">0%</span></div>
-        <div class="bar"><div id="fill"></div></div>
-    </div>
-    <h1 id="gameName">Ładowanie...</h1>
-    <p>Gra jest gotowa do uruchomienia.</p>
-    <button id="play">GRAJ ▶</button>
+    <header>
+        <img src="../assets/icons/logo.png" alt="SZOPERO">
+        <div>
+            <div class="brand">SZOPERO</div>
+            <div class="subtitle">CENTRUM GIER I PROGRAMÓW</div>
+        </div>
+    </header>
+
+    <section class="content">
+        <div class="art" id="art">
+            <div class="placeholder">🎮</div>
+        </div>
+        <div>
+            <div class="category" id="category">BIBLIOTEKA GIER</div>
+            <h1 id="gameName">Przygotowywanie gry...</h1>
+            <p class="description" id="description">
+                Przygotowujemy wybraną grę do uruchomienia.
+            </p>
+            <div class="status">
+                PRZYGOTOWANIE <span id="percent">0%</span>
+                <div class="bar"><div id="fill"></div></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-text">SZOPERO · WYBRANA GRA</div>
+        <button id="play" disabled>PRZYGOTOWYWANIE...</button>
+    </footer>
 </main>
+
 <script>
-const params = new URLSearchParams(location.search);
-const id = params.get("id");
-const names = {
-    "geometry-dash": "Geometry Dash Lite",
-    "clicker": "Szopik Klikacz",
-    "szopik-breaker": "Szopik Breaker"
-};
-const fill = document.getElementById("fill");
-const percent = document.getElementById("percent");
-const play = document.getElementById("play");
-play.disabled = true;
-play.style.opacity = "0.4";
+const params=new URLSearchParams(location.search);
+const id=params.get("id");
 
-let progress = 0;
-const timer = setInterval(() => {
-    progress = Math.min(100, progress + 5);
-    fill.style.width = progress + "%";
-    percent.textContent = progress + "%";
-
-    if (progress === 100) {
-        clearInterval(timer);
-        play.disabled = false;
-        play.style.opacity = "1";
+const games={
+    "geometry-dash":{
+        name:"Geometry Dash Lite",
+        description:"Skacz, omijaj przeszkody i sprawdzaj swoje umiejętności!",
+        category:"Zręcznościowe",
+        image:"assets/games/geometry-dash.png",
+        icon:"🟦"
+    },
+    "clicker":{
+        name:"Szopik Klikacz",
+        description:"Klikaj, zdobywaj punkty i ustanawiaj nowe rekordy!",
+        category:"Autorskie",
+        image:"assets/games/szopik-clicker.png",
+        icon:"🦝"
+    },
+    "szopik-breaker":{
+        name:"Szopik Breaker",
+        description:"Rozbijaj klocki, zdobywaj punkty i przechodź kolejne poziomy!",
+        category:"Autorskie",
+        image:"assets/games/szopik-breaker.png",
+        icon:"🧱"
     }
-}, 100);
+};
 
-document.getElementById("gameName").textContent =
-    names[id] || "Nieznana gra";
+const game=games[id];
+const play=document.getElementById("play");
+const fill=document.getElementById("fill");
+const percent=document.getElementById("percent");
 
-document.getElementById("play").addEventListener("click", async () => {
-    const button = document.getElementById("play");
-    button.disabled = true;
-    button.textContent = "URUCHAMIANIE...";
-    try {
+if(game){
+    document.getElementById("gameName").textContent=game.name;
+    document.getElementById("description").textContent=game.description;
+    document.getElementById("category").textContent=game.category;
+
+    const art=document.getElementById("art");
+    art.innerHTML="";
+
+    if(game.image){
+        const img=document.createElement("img");
+        img.src=game.image;
+        img.alt=game.name;
+        img.onerror=()=>{art.innerHTML='<div class="placeholder">'+game.icon+'</div>'};
+        art.appendChild(img);
+    }else{
+        const placeholder=document.createElement("div");
+        placeholder.className="placeholder";
+        placeholder.textContent=game.icon;
+        art.appendChild(placeholder);
+    }
+}else{
+    document.getElementById("gameName").textContent="Nieznana gra";
+    document.getElementById("description").textContent="Nie udało się znaleźć wybranej gry.";
+}
+
+let progress=0;
+const timer=setInterval(()=>{
+    progress=Math.min(100,progress+5);
+    fill.style.width=progress+"%";
+    percent.textContent=progress+"%";
+
+    if(progress>=100){
+        clearInterval(timer);
+        play.disabled=false;
+        play.textContent="GRAJ ▶";
+    }
+},100);
+
+play.addEventListener("click",async()=>{
+    if(!game)return;
+
+    play.disabled=true;
+    play.textContent="URUCHAMIANIE...";
+
+    try{
         await window.gameLauncher.startGame(id);
-    } catch (error) {
-        button.disabled = false;
-        button.textContent = "GRAJ ▶";
+    }catch(error){
+        play.disabled=false;
+        play.textContent="GRAJ ▶";
         alert("Nie udało się uruchomić gry.");
     }
 });
 </script>
 </body>
 </html>
-
-
-
-
 

@@ -14,3 +14,10 @@ SZOPERO-Test-Certificate.cer
 src/games/gamezop.html
 
 *.bak
+
+# Kopia bezpieczeństwa przed poprawkami
+backup-2.0.3-przed-poprawkami/
+
+# Lokalne kopie robocze
+*.before-covers
+*.backup*

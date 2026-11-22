@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uruchamianie SZOPERO</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    background: #f5f7fb;
+    color: #202938;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+main {
+    width: 100%;
+    padding: 30px;
+    text-align: center;
+}
+.logo {
+    width: 105px;
+    height: 105px;
+    object-fit: contain;
+    margin-bottom: 12px;
+}
+h1 {
+    margin: 0;
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: 3px;
+}
+.subtitle {
+    margin: 7px 0 30px;
+    color: #8994a6;
+    font-size: 11px;
+    letter-spacing: 4px;
+}
+.message {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+.track {
+    height: 10px;
+    background: #e3e9f1;
+    border-radius: 20px;
+    overflow: hidden;
+}
+#bar {
+    width: 0%;
+    height: 100%;
+    background: #65c99b;
+    border-radius: 20px;
+    transition: width .25s ease;
+}
+.footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    color: #8994a6;
+    font-size: 12px;
+}
+#percent { font-weight: 700; color: #526174; }
+</style>
+</head>
+<body>
+<main>
+    <img class="logo" src="../assets/icons/logo.png" alt="SZOPERO">
+    <h1>SZOPERO</h1>
+    <div class="subtitle">CENTRUM GIER I PROGRAMÓW</div>
+
+    <div class="message" id="message">Przygotowujemy aplikację do uruchomienia...</div>
+
+    <div class="track">
+        <div id="bar"></div>
+    </div>
+
+    <div class="footer">
+        <span>Proszę czekać</span>
+        <span id="percent">0%</span>
+    </div>
+</main>
+
+<script>
+window.setStartupProgress = function(value, message) {
+    const amount = Math.max(0, Math.min(100, value));
+    document.getElementById("bar").style.width = amount + "%";
+    document.getElementById("percent").textContent = amount + "%";
+
+    if (message) {
+        document.getElementById("message").textContent = message;
+    }
+};
+</script>
+</body>
+</html>

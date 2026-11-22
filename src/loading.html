@@ -2,71 +2,236 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ładowanie SZOPERO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SZOPERO — Uruchamianie gry</title>
 <style>
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Segoe UI", sans-serif;
-  background: #ffffff;
-  color: #202938;
+*{box-sizing:border-box}
+:root{
+ --bg:#0b1019;
+ --panel:#111b2a;
+ --muted:#8795aa;
+ --green:#70d6a5;
+ --border:#26354a;
 }
-main { width: 100%; padding: 30px 34px; text-align: center; }
-h2 { margin: 0 0 8px; font-size: 22px; }
-p { margin: 0 0 22px; color: #788397; font-size: 13px; }
-.track {
-  height: 9px;
-  background: #e9edf3;
-  border-radius: 20px;
-  overflow: hidden;
+body{
+ margin:0;
+ width:100vw;
+ height:100vh;
+ overflow:hidden;
+ background:
+ radial-gradient(ellipse at 50% 40%,#1c3048 0%,transparent 65%),
+ var(--bg);
+ color:#f5f8fc;
+ font-family:"Segoe UI",Arial,sans-serif;
 }
-#bar {
-  width: 0%;
-  height: 100%;
-  border-radius: 20px;
-  background: #65c99b;
-  transition: width .18s ease;
+main{
+ height:100%;
+ padding:23px 30px 20px;
+ display:flex;
+ flex-direction:column;
 }
-#percent {
-  display: block;
-  margin-top: 12px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #526174;
+header{
+ display:flex;
+ align-items:center;
+ height:43px;
 }
-</style>
-<style>
-.szopero-brand {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto 14px;
+.logo{
+ width:39px;
+ height:39px;
+ object-fit:contain;
+ margin-right:11px;
 }
-.szopero-brand img {
-    width: 76px;
-    height: 76px;
-    object-fit: contain;
+.brand{
+ font-size:19px;
+ font-weight:900;
+ letter-spacing:3px;
+}
+.version{
+ margin-left:auto;
+ color:#65758c;
+ font-size:10px;
+ letter-spacing:2px;
+}
+.content{
+ flex:1;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:28px;
+ min-height:0;
+}
+.cover-wrap{
+ width:245px;
+ height:190px;
+ flex-shrink:0;
+ padding:8px;
+ background:linear-gradient(145deg,#263b55,#172437);
+ border:1px solid #3a4d65;
+ border-radius:17px;
+ box-shadow:0 20px 50px #0005;
+}
+.cover{
+ width:100%;
+ height:100%;
+ display:block;
+ object-fit:contain;
+ border-radius:10px;
+}
+.info{
+ flex:1;
+ min-width:0;
+}
+.tag{
+ color:var(--green);
+ font-size:10px;
+ font-weight:800;
+ letter-spacing:3px;
+ margin-bottom:12px;
+}
+h1{
+ font-size:27px;
+ line-height:1.15;
+ margin:0;
+ font-weight:800;
+}
+.description{
+ margin-top:11px;
+ color:var(--muted);
+ font-size:12px;
+ line-height:1.6;
+ max-width:270px;
+}
+.divider{
+ height:1px;
+ background:var(--border);
+ margin:0 0 18px;
+}
+.progress-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:11px;
+}
+.status{
+ color:#aab7c9;
+ font-size:12px;
+}
+#percent{
+ color:var(--green);
+ font-size:14px;
+ font-weight:800;
+ font-variant-numeric:tabular-nums;
+}
+.track{
+ height:8px;
+ background:#263449;
+ border-radius:30px;
+ overflow:hidden;
+}
+#bar{
+ width:0%;
+ height:100%;
+ background:linear-gradient(90deg,#43b985,#8be8b8);
+ border-radius:30px;
+ box-shadow:0 0 14px #70d6a566;
+ transition:width .22s ease;
+}
+footer{
+ display:flex;
+ justify-content:space-between;
+ margin-top:13px;
+ color:#62738b;
+ font-size:10px;
+ letter-spacing:1.5px;
+}
+@media(max-width:520px){
+ main{padding:18px}
+ .content{gap:15px}
+ .cover-wrap{width:155px;height:145px}
+ h1{font-size:21px}
 }
 </style>
 </head>
 <body>
-<div class="szopero-brand"><img src="../assets/icons/logo.png" alt="SZOPERO"></div>
 <main>
-  <h2>Uruchamianie gry</h2>
-  <p>Przygotowujemy ją do uruchomienia...</p>
-  <div class="track"><div id="bar"></div></div>
+<header>
+ <img class="logo" src="../assets/icons/logo.png" alt="SZOPERO">
+ <div class="brand">SZOPERO</div>
+ <div class="version">GAME LAUNCHER</div>
+</header>
+
+<section class="content">
+ <div class="cover-wrap">
+  <img class="cover" id="gameCover" src="../assets/icons/logo.png" alt="">
+ </div>
+ <div class="info">
+  <div class="tag">PRZYGOTOWYWANIE GRY</div>
+  <h1 id="gameName">Ładowanie...</h1>
+  <div class="description" id="description">
+   Przygotowujemy grę do uruchomienia.
+  </div>
+ </div>
+</section>
+
+<div class="divider"></div>
+
+<section>
+ <div class="progress-head">
+  <span class="status" id="status">Przygotowywanie plików...</span>
   <span id="percent">0%</span>
+ </div>
+ <div class="track"><div id="bar"></div></div>
+ <footer>
+  <span>SZOPIKPRACZEKYT</span>
+  <span id="footerStatus">URUCHAMIANIE</span>
+ </footer>
+</section>
 </main>
+
 <script>
-window.setProgress = function(value) {
-  const amount = Math.max(0, Math.min(100, value));
-  document.getElementById("bar").style.width = amount + "%";
-  document.getElementById("percent").textContent = amount + "%";
+const id=new URLSearchParams(location.search).get("id");
+const games={
+ "geometry-dash":{
+  name:"Geometry Dash Lite",
+  description:"Skacz, omijaj przeszkody i sprawdzaj swoje umiejętności.",
+  image:"assets/games/geometry-dash.png"
+ },
+ "clicker":{
+  name:"Szopik Klikacz",
+  description:"Klikaj, zdobywaj punkty i ustanawiaj nowe rekordy.",
+  image:"assets/games/szopik-clicker.png"
+ },
+ "szopik-breaker":{
+  name:"Szopik Breaker",
+  description:"Rozbijaj klocki, zbieraj bonusy i przechodź kolejne poziomy.",
+  image:"assets/games/szopik-breaker.png"
+ }
+};
+const game=games[id]||{
+ name:"Nieznana gra",
+ description:"Przygotowujemy grę do uruchomienia.",
+ image:"assets/games/szopik-clicker.png"
+};
+document.getElementById("gameName").textContent=game.name;
+document.getElementById("description").textContent=game.description;
+document.getElementById("gameCover").src=game.image;
+document.getElementById("gameCover").alt=game.name;
+document.getElementById("gameCover").onerror=function(){this.src="../assets/icons/logo.png";};
+
+window.setProgress=function(value){
+ const n=Math.max(0,Math.min(100,value));
+ document.getElementById("bar").style.width=n+"%";
+ document.getElementById("percent").textContent=n+"%";
+ let message="Przygotowujemy pliki gry...";
+ let footer="URUCHAMIANIE";
+ if(n>=30)message="Wczytujemy zasoby gry...";
+ if(n>=65)message="Kończymy przygotowania...";
+ if(n>=100){
+  message="Gra jest gotowa!";
+  footer="GOTOWE";
+ }
+ document.getElementById("status").textContent=message;
+ document.getElementById("footerStatus").textContent=footer;
 };
 </script>
 </body>

@@ -86,6 +86,7 @@ canvas{
   box-shadow:0 20px 60px #0008;
 }
 .modal .emoji{font-size:42px;margin-bottom:8px}
+.breaker-cover{display:block!important;width:180px!important;height:120px!important;object-fit:contain!important;margin:0 auto 16px!important;}
 .modal h2{font-size:29px;margin:0 0 9px;letter-spacing:1px}
 .modal p{color:#a8b8d0;line-height:1.6;font-size:14px;margin:0 0 22px}
 button{
@@ -155,7 +156,7 @@ button:active{transform:scale(.97)}
     <canvas id="game" width="960" height="640"></canvas>
     <div class="overlay" id="overlay">
       <div class="modal">
-        <div class="emoji" id="modalEmoji">🦝</div>
+        <img src="../../assets/games/szopik-breaker.png" id="modalEmoji" class="breaker-cover" alt="Szopik Breaker">
         <h2 id="modalTitle">SZOPIK BREAKER</h2>
         <p id="modalText">Rozbij wszystkie klocki, zbieraj bonusy i przechodź kolejne poziomy!</p>
         <button class="primary" id="mainButton">ROZPOCZNIJ GRĘ</button>
@@ -183,7 +184,7 @@ const ctx=canvas.getContext("2d");
 const $=id=>document.getElementById(id);
 const W=960,H=640;
 
-let state="ready";
+let state="playing";
 let score=0,level=1,lives=3;
 let best=Number(localStorage.getItem("szopikBreakerBest")||0);
 let bricks=[],particles=[],drops=[],stars=[];
@@ -213,7 +214,7 @@ function saveScore(){
 }
 
 function overlay(emoji,title,message,button){
-  $("modalEmoji").textContent=emoji;
+  $("modalEmoji").alt=emoji;
   $("modalTitle").textContent=title;
   $("modalText").textContent=message;
   $("mainButton").textContent=button;
@@ -259,8 +260,9 @@ function newGame(){
   score=0;level=1;lives=3;
   particles=[];drops=[];
   makeLevel();resetBall();
-  state="ready";hud();
-  overlay("🦝","SZOPIK BREAKER","Rozbijaj klocki i zbieraj bonusy. Steruj myszką, dotykiem lub klawiaturą.","GRAJ!");
+  state="playing";
+  hideOverlay();
+  hud();
 }
 
 function start(){
@@ -537,9 +539,16 @@ for(let i=0;i<65;i++){
 
 makeLevel();
 resetBall();
+state="playing";
+hideOverlay();
 hud();
 requestAnimationFrame(frame);
 })();
 </script>
 </body>
 </html>
+
+
+
+
+

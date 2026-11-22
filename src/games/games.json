@@ -6,7 +6,8 @@
     "category": "Autorskie",
     "icon": "🦝",
     "color": "purple",
-    "path": "src/games/szopik-clicker/index.html"
+    "path": "src/games/szopik-clicker/index.html",
+    "image": "assets/games/szopik-clicker.png"
   },
   {
     "id": "geometry-dash",
@@ -15,7 +16,8 @@
     "category": "Zręcznościowe",
     "icon": "🟦",
     "color": "blue",
-    "path": "src/games/geometry-dash/index.html"
+    "path": "src/games/geometry-dash/index.html",
+    "image": "assets/games/geometry-dash.png"
   },
   {
     "id": "szopik-breaker",
@@ -24,6 +26,7 @@
     "category": "Autorskie",
     "icon": "🧱",
     "color": "orange",
-    "path": "src/games/szopik-breaker/index.html"
+    "path": "src/games/szopik-breaker/index.html",
+    "image": "assets/games/szopik-breaker.png"
   }
 ]

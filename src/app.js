@@ -60,7 +60,18 @@ async function loadGames() {
 
         const art = document.createElement("div");
         art.className = `game-art ${game.color || ""}`;
-        art.textContent = game.icon || "🎮";
+        if (game.image) {
+          const cover = document.createElement("img");
+          cover.src = game.image;
+          cover.alt = game.name;
+          cover.className = "game-cover";
+          cover.onerror = () => {
+            art.textContent = game.icon || "🎮";
+          };
+          art.appendChild(cover);
+        } else {
+          art.textContent = game.icon || "🎮";
+        }
 
         const info = document.createElement("div");
         info.className = "game-info";
@@ -180,4 +191,6 @@ checkButton.addEventListener("click", async () => {
     checkButton.disabled = false;
   }
 });
+
+
 

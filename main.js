@@ -38,7 +38,7 @@ const games = {
   }
 };
 
-function createLauncher() {
+function createLauncher(show = true) {
   launcher = new BrowserWindow({
     width: 1180,
     height: 760,
@@ -47,6 +47,7 @@ function createLauncher() {
     title: "SZOPERO",
     icon: path.join(__dirname, "assets", "icons", "logo.ico"),
     backgroundColor: "#f5f7fb",
+    show,
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -56,7 +57,7 @@ function createLauncher() {
     }
   });
 
-  launcher.loadFile(path.join(__dirname, "src", "index.html"));
+  return launcher.loadFile(path.join(__dirname, "src", "index.html"));
 }
 
 function openGame(id) {
@@ -64,8 +65,8 @@ function openGame(id) {
   if (!game) return;
 
   const loading = new BrowserWindow({
-    width: 420,
-    height: 230,
+    width: 720,
+    height: 420,
     icon: path.join(__dirname, "assets", "icons", "logo.ico"),
     frame: false,
     resizable: false,
@@ -137,18 +138,42 @@ function openGame(id) {
     clearInterval(interval);
   });
 
-  loading.loadFile(path.join(__dirname, "src", "loading.html"));
+  loading.loadFile(path.join(__dirname, "src", "loading.html"), { query: { id } });
 
   gameWindow.loadFile(
     path.join(__dirname, "src", "game-start.html"),
     { query: { id } }
   );
 
-  interval = setInterval(() => {
-    if (progress < 100) {
-      updateProgress(Math.min(100, progress + 4));
+  const loadingSteps = [
+    { value: 5, delay: 900 },
+    { value: 12, delay: 850 },
+    { value: 20, delay: 900 },
+    { value: 29, delay: 850 },
+    { value: 38, delay: 900 },
+    { value: 48, delay: 850 },
+    { value: 58, delay: 900 },
+    { value: 68, delay: 850 },
+    { value: 78, delay: 900 },
+    { value: 88, delay: 850 },
+    { value: 96, delay: 900 },
+    { value: 100, delay: 850 }
+  ];
+
+  let step = 0;
+
+  function nextLoadingStep() {
+    if (step >= loadingSteps.length) return;
+
+    const current = loadingSteps[step++];
+    updateProgress(current.value);
+
+    if (current.value < 100) {
+      interval = setTimeout(nextLoadingStep, current.delay);
     }
-  }, 100);
+  }
+
+  nextLoadingStep();
 }
 
 ipcMain.handle("start-game", (event, id) => {
@@ -388,8 +413,57 @@ ipcMain.handle("open-link", (_event, url) => {
   }
 });
 
+async function showStartupScreen() {
+  const splash = new BrowserWindow({
+    width: 470,
+    height: 340,
+    frame: false,
+    resizable: false,
+    center: true,
+    show: false,
+    backgroundColor: "#f5f7fb",
+    icon: path.join(__dirname, "assets", "icons", "logo.ico"),
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true
+    }
+  });
+
+  await splash.loadFile(path.join(__dirname, "src", "startup.html"));
+  splash.show();
+
+  const progress = (value, message) => {
+    if (!splash.isDestroyed()) {
+      splash.webContents.executeJavaScript(
+        `window.setStartupProgress(${value}, ${JSON.stringify(message)})`
+      ).catch(() => {});
+    }
+  };
+
+  const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+  progress(10, "Przygotowujemy aplikację...");
+  await wait(900);
+
+  progress(30, "Uruchamiamy moduły SZOPERO...");
+  await wait(900);
+
+  progress(55, "Tworzymy okno aplikacji...");
+  await createLauncher(false);
+
+  progress(80, "Wczytujemy bibliotekę...");
+  await wait(1200);
+
+  progress(100, "SZOPERO jest gotowe!");
+  await wait(1100);
+
+  launcher.show();
+  splash.close();
+}
+
 app.whenReady().then(async () => {
-  createLauncher();
+  await showStartupScreen();
 
   await showWelcomeModal();
   await showPendingReleaseNotes();
@@ -414,4 +488,9 @@ app.on("activate", () => {
     createLauncher();
   }
 });
+
+
+
+
+
 
