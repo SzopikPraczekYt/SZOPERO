@@ -8,3 +8,9 @@ backup/
 *.backup
 SZOPERO-Test-Certificate.pfx
 SZOPERO-Test-Certificate.cer
+
+# Pliki lokalne i kopie zapasowe
+*.backup-*
+src/games/gamezop.html
+
+*.bak

@@ -29,7 +29,7 @@
         <span class="muted">Twoje centrum gier</span>
         <h2 id="page-title">Strona główna</h2>
       </div>
-      <div class="version" id="version">Wersja 1.0.2</div>
+      <div class="version" id="version">Wersja ...</div>
     </header>
 
     <section id="home" class="page active-page">
@@ -59,22 +59,30 @@
     </section>
 
     <section id="games" class="page">
-      <div class="section-heading"><div><h3>Moje gry</h3><p>Twoja biblioteka gier</p></div></div>
-      <div class="game-card">
-        <div class="game-art"><img src="../assets/icons/logo.png" class="brand-logo" alt="SZOPERO"></div>
-        <div class="game-info"><span class="tag">GRA SZOPERO</span><h3>Szopik Klikacz</h3><p>Klikaj, zdobywaj punkty i ustanawiaj rekordy!</p><button class="small-primary" data-launch="clicker">Uruchom grę</button></div>
-      </div>
-      <div class="game-card">
-        <div class="game-art gd-art"><img src="../assets/icons/geometry-dash.png" alt="Geometry Dash"></div>
-        <div class="game-info"><span class="tag">GEOMETRY DASH LITE</span><h3>Geometry Dash Lite</h3><p>Skacz, omijaj przeszkody i sprawdzaj swoje umiejętności!</p><button class="small-primary" data-launch="geometry-dash">Uruchom grę</button></div>
-      </div>
-    </section>
+  <div class="section-heading">
+    <div>
+      <h3>Moje gry</h3>
+      <p>Twoja biblioteka gier w SZOPERO</p>
+    </div>
+  </div>
+
+  <div class="games-toolbar">
+    <input id="game-search" type="search" placeholder="Szukaj gry...">
+    <select id="game-category">
+      <option>Wszystkie</option>
+    </select>
+  </div>
+
+  <div id="games-list" class="games-grid">
+    <p class="muted">Wczytywanie biblioteki...</p>
+  </div>
+</section>
 
     <section id="updates" class="page">
       <div class="section-heading"><div><h3>Aktualizacje</h3><p>Nowości i poprawki SZOPERO</p></div></div>
       <div class="panel">
         <span class="tag">AKTUALNA WERSJA</span>
-        <h3>SZOPERO 1.0.2</h3>
+        <h3>SZOPERO <span id="updates-version">...</span></h3>
         <p>Dodano obsługę automatycznych aktualizacji.</p>
         <ul>
           <li>Automatyczne sprawdzanie aktualizacji</li>
@@ -82,17 +90,6 @@
           <li>Możliwość instalacji pobranej aktualizacji</li>
           <li>Poprawki i usprawnienia launchera</li>
         </ul>
-        <div class="update-history">
-          <h3>Wcześniejsze wydania</h3>
-          <h4>SZOPERO 1.0.0</h4>
-          <p>Pierwsze wydanie launchera.</p>
-          <ul>
-            <li>Nowy launcher SZOPERO</li>
-            <li>Osobne okna dla gier</li>
-            <li>Pierwsza autorska gra — Szopik Klikacz</li>
-            <li>Biblioteka gier</li>
-          </ul>
-        </div>
         <button class="primary" id="check-updates">Sprawdź aktualizacje</button>
         <p id="update-result" class="muted"></p>
       </div>
@@ -112,5 +109,9 @@
   <script src="app.js"></script>
 </body>
 </html>
+
+
+
+
 
 

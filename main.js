@@ -1,8 +1,27 @@
-const { app, BrowserWindow, ipcMain, shell } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  shell,
+  dialog
+} = require("electron");
+
 const path = require("path");
+const fs = require("fs");
 const { autoUpdater } = require("electron-updater");
 
 let launcher;
+let updatePromptOpen = false;
+
+const pendingNotesFile = path.join(
+  app.getPath("userData"),
+  "pending-release-notes.json"
+);
+
+const welcomeFile = path.join(
+  app.getPath("userData"),
+  "welcome-2.0.0-shown.json"
+);
 
 const games = {
   clicker: {
@@ -12,6 +31,10 @@ const games = {
   "geometry-dash": {
     name: "Geometry Dash Lite",
     file: path.join(__dirname, "src", "games", "geometry-dash", "index.html")
+  },
+  "szopik-breaker": {
+    name: "Szopik Breaker",
+    file: path.join(__dirname, "src", "games", "szopik-breaker", "index.html")
   }
 };
 
@@ -22,6 +45,7 @@ function createLauncher() {
     minWidth: 900,
     minHeight: 600,
     title: "SZOPERO",
+    icon: path.join(__dirname, "assets", "icons", "logo.ico"),
     backgroundColor: "#f5f7fb",
     autoHideMenuBar: true,
     webPreferences: {
@@ -42,8 +66,7 @@ function openGame(id) {
   const loading = new BrowserWindow({
     width: 420,
     height: 230,
-    icon: path.join(__dirname, 'assets', 'icons', 'logo.png'),
-    icon: path.join(__dirname, 'assets', 'icons', 'logo.png'),
+    icon: path.join(__dirname, "assets", "icons", "logo.ico"),
     frame: false,
     resizable: false,
     center: true,
@@ -58,11 +81,10 @@ function openGame(id) {
   const gameWindow = new BrowserWindow({
     width: 1100,
     height: 760,
-    icon: path.join(__dirname, 'assets', 'icons', 'logo.png'),
-    icon: path.join(__dirname, 'assets', 'icons', 'logo.png'),
     minWidth: 700,
     minHeight: 500,
-    title: "SZOPERO",
+    title: game.name,
+    icon: path.join(__dirname, "assets", "icons", "logo.ico"),
     show: false,
     autoHideMenuBar: true,
     backgroundColor: "#101525",
@@ -90,6 +112,7 @@ function openGame(id) {
 
     if (progress >= 100 && loadingReady && startReady) {
       clearInterval(interval);
+
       if (!loading.isDestroyed()) loading.close();
       if (!gameWindow.isDestroyed()) gameWindow.show();
     }
@@ -137,7 +160,10 @@ ipcMain.handle("start-game", (event, id) => {
   if (game.url) {
     gameWindow.loadURL(game.url);
   } else {
-    gameWindow.loadFile(game.file);
+    gameWindow.loadFile(game.file).then(() => {
+      gameWindow.focus();
+      gameWindow.webContents.focus();
+    });
   }
 
   return true;
@@ -150,7 +176,6 @@ ipcMain.handle("open-game", (_event, id) => {
 
 ipcMain.handle("get-version", () => app.getVersion());
 
-
 function sendUpdateStatus(data) {
   BrowserWindow.getAllWindows().forEach((win) => {
     if (!win.isDestroyed()) {
@@ -159,12 +184,128 @@ function sendUpdateStatus(data) {
   });
 }
 
+function getReleaseNotes(info) {
+  const notes = info.releaseNotes;
+
+  if (typeof notes === "string") {
+    return notes;
+  }
+
+  if (Array.isArray(notes)) {
+    return notes.map((item) => {
+      if (typeof item === "string") return item;
+      return item.note || "";
+    }).filter(Boolean).join("\n\n");
+  }
+
+  return "";
+}
+
+function savePendingNotes(info) {
+  const data = {
+    version: info.version,
+    notes: getReleaseNotes(info)
+  };
+
+  fs.mkdirSync(path.dirname(pendingNotesFile), { recursive: true });
+  fs.writeFileSync(
+    pendingNotesFile,
+    JSON.stringify(data, null, 2),
+    "utf8"
+  );
+}
+
+async function showWelcomeModal() {
+  if (app.getVersion() !== "2.0.0") return;
+  if (fs.existsSync(welcomeFile)) return;
+
+  await dialog.showMessageBox(launcher, {
+    type: "info",
+    title: "Witaj w SZOPERO 2.0.0!",
+    message: "SZOPERO 2.0.0 jest już gotowe!",
+    detail: "Witaj w nowej wersji launchera SzopikPraczekYT.\\n\\nOdkrywaj gry, korzystaj z nowych funkcji i sprawdzaj kolejne aktualizacje. Miłego korzystania!",
+    buttons: ["Zaczynamy!"],
+    defaultId: 0,
+    noLink: true
+  });
+
+  fs.mkdirSync(path.dirname(welcomeFile), { recursive: true });
+  fs.writeFileSync(
+    welcomeFile,
+    JSON.stringify({ version: "2.0.0", shown: true }, null, 2),
+    "utf8"
+  );
+}
+async function showPendingReleaseNotes() {
+  if (!fs.existsSync(pendingNotesFile)) return;
+
+  try {
+    const data = JSON.parse(
+      fs.readFileSync(pendingNotesFile, "utf8")
+    );
+
+    if (data.version !== app.getVersion()) return;
+
+    fs.unlinkSync(pendingNotesFile);
+
+    await dialog.showMessageBox(launcher, {
+      type: "info",
+      title: `Co nowego w SZOPERO ${data.version}?`,
+      message: `SZOPERO zostało zaktualizowane do wersji ${data.version}!`,
+      detail: data.notes || "Szczegóły tego wydania nie są dostępne.",
+      buttons: ["Super!"],
+      defaultId: 0
+    });
+  } catch (error) {
+    console.error("Nie udało się wyświetlić informacji o wydaniu:", error);
+  }
+}
+
+autoUpdater.autoDownload = false;
+autoUpdater.autoInstallOnAppQuit = false;
+
 autoUpdater.on("checking-for-update", () => {
   sendUpdateStatus({ status: "checking" });
 });
 
-autoUpdater.on("update-available", (info) => {
-  sendUpdateStatus({ status: "available", version: info.version });
+autoUpdater.on("update-available", async (info) => {
+  sendUpdateStatus({
+    status: "available",
+    version: info.version
+  });
+
+  if (updatePromptOpen) return;
+  updatePromptOpen = true;
+
+  try {
+    const result = await dialog.showMessageBox(launcher, {
+      type: "info",
+      title: "Dostępna aktualizacja SZOPERO",
+      message: `Dostępna jest nowa wersja SZOPERO ${info.version}.`,
+      detail: "Czy chcesz teraz pobrać aktualizację?",
+      buttons: [
+        "Aktualizuj teraz",
+        "Przypomnij następnym razem"
+      ],
+      defaultId: 0,
+      cancelId: 1,
+      noLink: true
+    });
+
+    if (result.response === 0) {
+      sendUpdateStatus({ status: "downloading", percent: 0 });
+      await autoUpdater.downloadUpdate();
+    } else {
+      sendUpdateStatus({ status: "deferred" });
+    }
+  } catch (error) {
+    sendUpdateStatus({
+      status: "error",
+      message: error.message
+    });
+  } finally {
+    updatePromptOpen = false;
+  }
 });
 
 autoUpdater.on("download-progress", (progress) => {
@@ -175,7 +316,16 @@ autoUpdater.on("download-progress", (progress) => {
 });
 
 autoUpdater.on("update-downloaded", (info) => {
-  sendUpdateStatus({ status: "downloaded", version: info.version });
+  try {
+    savePendingNotes(info);
+  } catch (error) {
+    console.error("Nie udało się zapisać informacji o wydaniu:", error);
+  }
+
+  sendUpdateStatus({
+    status: "downloaded",
+    version: info.version
+  });
 });
 
 autoUpdater.on("update-not-available", () => {
@@ -183,19 +333,45 @@ autoUpdater.on("update-not-available", () => {
 });
 
 autoUpdater.on("error", (error) => {
-  sendUpdateStatus({ status: "error", message: error.message });
+  sendUpdateStatus({
+    status: "error",
+    message: error.message
+  });
 });
+
+function updaterSupported() {
+  if (!app.isPackaged) return false;
+
+  if (process.env.PORTABLE_EXECUTABLE_FILE) {
+    return false;
+  }
+
+  return true;
+}
 
 ipcMain.handle("check-updates", async () => {
   if (!app.isPackaged) {
-    return { started: false, error: "Aktualizacje sprawdzisz w zainstalowanej wersji SZOPERO." };
+    return {
+      started: false,
+      error: "Aktualizacje sprawdzisz w zainstalowanej wersji SZOPERO."
+    };
+  }
+
+  if (!updaterSupported()) {
+    return {
+      started: false,
+      error: "Automatyczne aktualizacje wymagają wersji instalacyjnej SZOPERO."
+    };
   }
 
   try {
     await autoUpdater.checkForUpdates();
     return { started: true };
   } catch (error) {
-    return { started: false, error: error.message };
+    return {
+      started: false,
+      error: error.message
+    };
   }
 });
 
@@ -210,23 +386,30 @@ ipcMain.handle("open-link", (_event, url) => {
   }
 });
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   createLauncher();
-  if (app.isPackaged) {
-    setTimeout(() => autoUpdater.checkForUpdates().catch(() => {}), 5000);
+
+  await showWelcomeModal();
+  await showPendingReleaseNotes();
+
+  if (updaterSupported()) {
+    setTimeout(() => {
+      autoUpdater.checkForUpdates().catch((error) => {
+        console.error("Błąd sprawdzania aktualizacji:", error);
+      });
+    }, 5000);
   }
 });
 
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
 });
 
 app.on("activate", () => {
-  if (BrowserWindow.getAllWindows().length === 0) createLauncher();
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createLauncher();
+  }
 });
-
-
-
-
-
 

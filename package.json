@@ -1,6 +1,6 @@
 {
   "name": "szopero",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "SZOPERO - launcher gier SzopikPraczekYT",
   "main": "main.js",
   "scripts": {
@@ -30,7 +30,8 @@
       "target": [
         "portable",
         "nsis"
-      ]
+      ],
+      "icon": "assets/icons/logo.ico"
     },
     "portable": {
       "artifactName": "SZOPERO-${version}-portable.exe"
@@ -38,7 +39,9 @@
     "nsis": {
       "artifactName": "SZOPERO-${version}-Setup.exe",
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/icons/logo.ico",
+      "uninstallerIcon": "assets/icons/logo.ico"
     },
     "publish": {
       "provider": "github",

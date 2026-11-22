@@ -1,20 +1,29 @@
 [
   {
-    "id": "szopero-demo",
-    "name": "Szopero Demo",
-    "description": "Pierwsza mała gra uruchamiana bezpośrednio w SZOPERO.",
-    "category": "Demo",
+    "id": "clicker",
+    "name": "Szopik Klikacz",
+    "description": "Klikaj, zdobywaj punkty i ustanawiaj rekordy!",
+    "category": "Autorskie",
     "icon": "🦝",
     "color": "purple",
-    "path": "src/games/demo/index.html"
+    "path": "src/games/szopik-clicker/index.html"
   },
   {
-    "id": "coming-soon",
-    "name": "Kolejna gra",
-    "description": "Tutaj pojawi się następna gra dodana do biblioteki.",
-    "category": "Przygodowe",
-    "icon": "🎮",
+    "id": "geometry-dash",
+    "name": "Geometry Dash Lite",
+    "description": "Skacz, omijaj przeszkody i sprawdzaj swoje umiejętności!",
+    "category": "Zręcznościowe",
+    "icon": "🟦",
     "color": "blue",
-    "path": null
+    "path": "src/games/geometry-dash/index.html"
+  },
+  {
+    "id": "szopik-breaker",
+    "name": "Szopik Breaker",
+    "description": "Rozbijaj klocki, zdobywaj punkty i przechodź kolejne poziomy!",
+    "category": "Autorskie",
+    "icon": "🧱",
+    "color": "orange",
+    "path": "src/games/szopik-breaker/index.html"
   }
 ]

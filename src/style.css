@@ -298,3 +298,122 @@ body {
     height: 170px !important;
   }
 }
+
+/* SZOPERO 1.1.0 - NOWA BIBLIOTEKA */
+
+.games-toolbar {
+  display: flex;
+  gap: 12px;
+  margin: 22px 0;
+  flex-wrap: wrap;
+}
+
+.games-toolbar input,
+.games-toolbar select {
+  background: #ffffff;
+  border: 1px solid #e2e7f0;
+  border-radius: 12px;
+  padding: 13px 16px;
+  color: #20283a;
+  font: inherit;
+  outline: none;
+}
+
+.games-toolbar input {
+  flex: 1;
+  min-width: 220px;
+}
+
+.games-toolbar select {
+  min-width: 170px;
+  cursor: pointer;
+}
+
+.games-toolbar input:focus,
+.games-toolbar select:focus {
+  border-color: #8b72ed;
+  box-shadow: 0 0 0 3px rgba(139, 114, 237, 0.12);
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.games-grid .game-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e9edf5;
+  border-radius: 18px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.games-grid .game-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(35, 45, 75, 0.09);
+}
+
+.games-grid .game-art {
+  min-height: 145px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 58px;
+  background: linear-gradient(135deg, #eee9ff, #f7f4ff);
+}
+
+.games-grid .game-art.blue {
+  background: linear-gradient(135deg, #dceeff, #f0f7ff);
+}
+
+.games-grid .game-info {
+  padding: 20px;
+}
+
+.games-grid .game-info h3 {
+  margin: 12px 0 8px;
+  color: #20283a;
+}
+
+.games-grid .game-info p {
+  color: #7a8498;
+  line-height: 1.6;
+  min-height: 48px;
+}
+
+.games-grid .small-primary {
+  margin-top: 10px;
+}
+
+.game-soon {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 8px 13px;
+  border-radius: 9px;
+  background: #f0f1f5;
+  color: #7a8498;
+  font-size: 13px;
+}
+
+.empty-games {
+  color: #7a8498;
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 14px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .games-toolbar {
+    flex-direction: column;
+  }
+
+  .games-toolbar input,
+  .games-toolbar select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
