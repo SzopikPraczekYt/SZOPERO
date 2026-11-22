@@ -223,7 +223,7 @@ async function showWelcomeModal() {
     type: "info",
     title: "Witaj w SZOPERO 2.0.0!",
     message: "SZOPERO 2.0.0 jest już gotowe!",
-    detail: "Witaj w nowej wersji launchera SzopikPraczekYT.\\n\\nOdkrywaj gry, korzystaj z nowych funkcji i sprawdzaj kolejne aktualizacje. Miłego korzystania!",
+    detail: "Witaj w nowej wersji launchera SzopikPraczekYT.\n\nOdkrywaj gry, korzystaj z nowych funkcji i sprawdzaj kolejne aktualizacje. Miłego korzystania!",
     buttons: ["Zaczynamy!"],
     defaultId: 0,
     noLink: true
@@ -246,8 +246,6 @@ async function showPendingReleaseNotes() {
 
     if (data.version !== app.getVersion()) return;
 
-    fs.unlinkSync(pendingNotesFile);
-
     await dialog.showMessageBox(launcher, {
       type: "info",
       title: `Co nowego w SZOPERO ${data.version}?`,
@@ -256,6 +254,10 @@ async function showPendingReleaseNotes() {
       buttons: ["Super!"],
       defaultId: 0
     });
+
+    if (fs.existsSync(pendingNotesFile)) {
+      fs.unlinkSync(pendingNotesFile);
+    }
   } catch (error) {
     console.error("Nie udało się wyświetlić informacji o wydaniu:", error);
   }
