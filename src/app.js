@@ -194,3 +194,204 @@ checkButton.addEventListener("click", async () => {
 
 
 
+
+
+function renderReleaseMarkdown(container, markdown) {
+  container.replaceChildren();
+
+  const lines = markdown.replace(/\r/g, "").split("\n");
+  let list = null;
+
+  function closeList() {
+    list = null;
+  }
+
+  function formatInline(text) {
+    const fragment = document.createDocumentFragment();
+    const pattern = /(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\(https?:\/\/[^ )]+\))/g;
+    let last = 0;
+
+    for (const match of text.matchAll(pattern)) {
+      fragment.append(document.createTextNode(text.slice(last, match.index)));
+
+      const token = match[0];
+      let element;
+
+      if (token.startsWith("**")) {
+        element = document.createElement("strong");
+        element.textContent = token.slice(2, -2);
+      } else if (token.startsWith("`")) {
+        element = document.createElement("code");
+        element.textContent = token.slice(1, -1);
+      } else {
+        const parts = token.match(/^\[([^\]]+)\]\((https?:\/\/[^ )]+)\)$/);
+        element = document.createElement("a");
+        element.textContent = parts[1];
+        element.href = parts[2];
+        element.target = "_blank";
+        element.rel = "noopener noreferrer";
+      }
+
+      fragment.append(element);
+      last = match.index + token.length;
+    }
+
+    fragment.append(document.createTextNode(text.slice(last)));
+    return fragment;
+  }
+
+  let skippedMainHeading = false;
+  for (const line of lines) {
+    const heading = line.match(/^(#{1,3})\s+(.+)$/);
+    const bullet = line.match(/^\s*[-*]\s+(.+)$/);
+    const numbered = line.match(/^\s*\d+\.\s+(.+)$/);
+
+    if (heading) {
+      closeList();
+      const element = document.createElement(
+        heading[1].length === 1 ? "h2" : "h3"
+      );
+      element.append(formatInline(heading[2]));
+      container.append(element);
+    } else if (bullet || numbered) {
+      const type = bullet ? "ul" : "ol";
+
+      if (!list || list.tagName.toLowerCase() !== type) {
+        closeList();
+        list = document.createElement(type);
+        container.append(list);
+      }
+
+      const item = document.createElement("li");
+      item.append(formatInline((bullet || numbered)[1]));
+      list.append(item);
+    } else if (line.trim()) {
+      closeList();
+      const paragraph = document.createElement("p");
+      paragraph.append(formatInline(line));
+      container.append(paragraph);
+    } else {
+      closeList();
+    }
+  }
+}
+
+function renderReleaseMarkdown(container, markdown) {
+  container.replaceChildren();
+
+  const lines = markdown.replace(/\r/g, "").split("\n");
+  let list = null;
+
+  function closeList() {
+    list = null;
+  }
+
+  function formatInline(text) {
+    const fragment = document.createDocumentFragment();
+    const pattern = /(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\(https?:\/\/[^ )]+\))/g;
+    let last = 0;
+
+    for (const match of text.matchAll(pattern)) {
+      fragment.append(document.createTextNode(text.slice(last, match.index)));
+
+      const token = match[0];
+      let element;
+
+      if (token.startsWith("**")) {
+        element = document.createElement("strong");
+        element.textContent = token.slice(2, -2);
+      } else if (token.startsWith("`")) {
+        element = document.createElement("code");
+        element.textContent = token.slice(1, -1);
+      } else {
+        const parts = token.match(/^\[([^\]]+)\]\((https?:\/\/[^ )]+)\)$/);
+        element = document.createElement("a");
+        element.textContent = parts[1];
+        element.href = parts[2];
+        element.target = "_blank";
+        element.rel = "noopener noreferrer";
+      }
+
+      fragment.append(element);
+      last = match.index + token.length;
+    }
+
+    fragment.append(document.createTextNode(text.slice(last)));
+    return fragment;
+  }
+
+  let skippedMainHeading = false;
+  for (const line of lines) {
+    const heading = line.match(/^(#{1,3})\s+(.+)$/);
+    const bullet = line.match(/^\s*[-*]\s+(.+)$/);
+    const numbered = line.match(/^\s*\d+\.\s+(.+)$/);
+
+    if (heading) {
+      closeList();
+      const element = document.createElement(
+        heading[1].length === 1 ? "h2" : "h3"
+      );
+      element.append(formatInline(heading[2]));
+      container.append(element);
+    } else if (bullet || numbered) {
+      const type = bullet ? "ul" : "ol";
+
+      if (!list || list.tagName.toLowerCase() !== type) {
+        closeList();
+        list = document.createElement(type);
+        container.append(list);
+      }
+
+      const item = document.createElement("li");
+      item.append(formatInline((bullet || numbered)[1]));
+      list.append(item);
+    } else if (line.trim()) {
+      closeList();
+      const paragraph = document.createElement("p");
+      paragraph.append(formatInline(line));
+      container.append(paragraph);
+    } else {
+      closeList();
+    }
+  }
+}
+
+async function loadReleaseNotes() {
+  const container = document.getElementById("release-notes");
+  if (!container) return;
+
+  container.textContent = "Pobieranie informacji z GitHuba...";
+
+  try {
+    const release = await window.szopero.getLatestRelease();
+
+
+    const version = document.createElement("p");
+    version.className = "muted";
+    version.textContent = `Wersja ${release.version}`;
+
+    const notes = document.createElement("div");
+    notes.className = "release-notes-content";
+    renderReleaseMarkdown(notes, release.notes || "Brak opisu tego wydania.");
+
+    const link = document.createElement("a");
+    link.href = release.url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "Zobacz wydanie na GitHubie";
+
+    container.replaceChildren(version, notes, link);
+  } catch (error) {
+    container.textContent = "Nie udało się pobrać informacji z GitHuba: " + error.message;
+    console.error("Błąd pobierania informacji o wydaniu:", error);
+  }
+}
+
+loadReleaseNotes();
+
+
+
+
+
+
+

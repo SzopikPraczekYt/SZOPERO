@@ -1,0 +1,57 @@
+diff --git a/node_modules/app-builder-lib/out/appInfo.js b/node_modules/app-builder-lib/out/appInfo.js
+index d159c17..c3a9c5e 100644
+--- a/node_modules/app-builder-lib/out/appInfo.js
++++ b/node_modules/app-builder-lib/out/appInfo.js
+@@ -40,7 +40,7 @@ class AppInfo {
+         this.buildNumber = info.config.buildNumber || buildNumberEnvs;
+         if (buildVersion == null) {
+             buildVersion = this.version;
+-            if (!(0, builder_util_1.isEmptyOrSpaces)(this.buildNumber)) {
++            if (!(0, builder_util_1.isEmptyOrSpaces)(this.buildNumber) && !/^\d+\.\d+\.\d+\.\d+$/.test(this.version)) {
+                 buildVersion += `.${this.buildNumber}`;
+             }
+         }
+@@ -57,6 +57,9 @@ class AppInfo {
+         this.productFilename = executableName != null ? (0, filename_1.sanitizeFileName)(executableName, normalizeNfd) : this.sanitizedProductName;
+     }
+     get channel() {
++        if (/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(this.version)) {
++            return null;
++        }
+         const prereleaseInfo = (0, semver_1.prerelease)(this.version);
+         if (prereleaseInfo != null && prereleaseInfo.length > 0) {
+             return prereleaseInfo[0];
+@@ -64,6 +67,10 @@ class AppInfo {
+         return null;
+     }
+     getVersionInWeirdWindowsForm(isSetBuildNumber = true) {
++        const fourPartVersion = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.exec(this.version);
++        if (fourPartVersion) {
++            return fourPartVersion.slice(1).join(".");
++        }
+         const [major, maybe_minor, maybe_patch] = this.version.split(".").map(versionPart => parseInt(versionPart));
+         // The major component must be present. Here it can be either NaN or undefined, which
+         // both returns true from isNaN.
+@@ -150,3 +157,4 @@ function filterCFBundleIdentifier(identifier) {
+     return identifier.replace(/ /g, "-").replace(/[^a-zA-Z0-9.-]/g, "");
+ }
+ //# sourceMappingURL=appInfo.js.map
++
+diff --git a/node_modules/app-builder-lib/out/util/normalizePackageData.js b/node_modules/app-builder-lib/out/util/normalizePackageData.js
+index aa0baf0..1902fa1 100644
+--- a/node_modules/app-builder-lib/out/util/normalizePackageData.js
++++ b/node_modules/app-builder-lib/out/util/normalizePackageData.js
+@@ -149,6 +149,13 @@ const check = [
+             data.version = "";
+             return true;
+         }
++        const fourPartVersion = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.exec(data.version);
++        if (fourPartVersion) {
++            if (fourPartVersion.slice(1).some(part => Number(part) > 65535)) {
++                throw new Error(`Invalid four-part version: "${data.version}"`);
++            }
++            return true;
++        }
+         if (!semver.valid(data.version, loose)) {
+             throw new Error(`Invalid version: "${data.version}"`);
+         }

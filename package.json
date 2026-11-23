@@ -1,16 +1,18 @@
 {
   "name": "szopero",
-  "version": "2.0.3",
+  "version": "2.0.3.1",
   "description": "SZOPERO - launcher gier SzopikPraczekYT",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder --win portable",
-    "installer": "electron-builder --win nsis"
+    "installer": "electron-builder --win nsis",
+    "postinstall": "patch-package"
   },
   "devDependencies": {
     "electron": "^39.0.0",
-    "electron-builder": "^26.0.12"
+    "electron-builder": "^26.0.12",
+    "patch-package": "^8.0.1"
   },
   "build": {
     "appId": "pl.szopikpraczekyt.szopero",

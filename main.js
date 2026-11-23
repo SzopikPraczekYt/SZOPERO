@@ -8,6 +8,7 @@ const {
 
 const path = require("path");
 const fs = require("fs");
+const https = require("https");
 const { autoUpdater } = require("electron-updater");
 
 let launcher;
@@ -44,7 +45,7 @@ function createLauncher(show = true) {
     height: 760,
     minWidth: 900,
     minHeight: 600,
-    title: "SZOPERO",
+    title: `SZOPERO - Launcher | ${app.getVersion()}`,
     icon: path.join(__dirname, "assets", "icons", "logo.ico"),
     backgroundColor: "#f5f7fb",
     show,
@@ -208,6 +209,55 @@ function sendUpdateStatus(data) {
     }
   });
 }
+
+
+function fetchLatestRelease() {
+  return new Promise((resolve, reject) => {
+    const request = https.get(
+      "https://api.github.com/repos/SzopikPraczekYt/SZOPERO/releases/latest",
+      {
+        headers: {
+          "User-Agent": "SZOPERO",
+          "Accept": "application/vnd.github+json"
+        }
+      },
+      (response) => {
+        let body = "";
+
+        response.on("data", chunk => body += chunk);
+
+        response.on("end", () => {
+          try {
+            if (response.statusCode !== 200) {
+              reject(new Error("GitHub zwrócił błąd: " + response.statusCode));
+              return;
+            }
+
+            const release = JSON.parse(body);
+
+            resolve({
+              version: release.tag_name.replace(/^v/, ""),
+              name: release.name || "",
+              notes: release.body || "",
+              url: release.html_url
+            });
+          } catch (error) {
+            reject(error);
+          }
+        });
+      }
+    );
+
+    request.on("error", reject);
+    request.setTimeout(10000, () => {
+      request.destroy(new Error("Przekroczono czas połączenia z GitHubem."));
+    });
+  });
+}
+
+ipcMain.handle("get-latest-release", async () => {
+  return await fetchLatestRelease();
+});
 
 function getReleaseNotes(info) {
   const notes = info.releaseNotes;
@@ -488,6 +538,8 @@ app.on("activate", () => {
     createLauncher();
   }
 });
+
+
 
 
 
